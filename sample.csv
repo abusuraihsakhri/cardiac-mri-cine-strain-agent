@@ -1,0 +1,6 @@
+study_id,patient_id,heart_rate_bpm,bsa_m2,lvedv_ml,lvesv_ml,lv_mass_g,gls_pct,gcs_pct,grs_pct,native_t1_ms,post_contrast_t1_myo_ms,pre_contrast_t1_blood_ms,post_contrast_t1_blood_ms,hematocrit_pct,lge_pattern,lge_transmurality_pct
+CMR_NORM_001,PAT_101,72.0,1.85,145.0,58.0,120.0,-21.0,-23.0,44.0,1005.0,480.0,1580.0,320.0,42.0,none,0.0
+CMR_AMYLOID_002,PAT_102,68.0,1.75,130.0,60.0,180.0,-10.5,-12.0,18.0,1160.0,370.0,1550.0,340.0,37.0,diffuse,40.0
+CMR_INFARCT_003,PAT_103,78.0,1.95,195.0,115.0,145.0,-12.0,-14.0,22.0,1050.0,420.0,1520.0,310.0,40.0,transmural,75.0
+CMR_DCM_004,PAT_104,82.0,1.90,230.0,150.0,135.0,-8.5,-9.5,15.0,1080.0,440.0,1500.0,300.0,41.0,mid_wall,20.0
+CMR_MYOCARDITIS_005,PAT_105,75.0,1.80,140.0,55.0,115.0,-17.0,-19.0,38.0,1120.0,460.0,1560.0,330.0,43.0,subepicardial,25.0
