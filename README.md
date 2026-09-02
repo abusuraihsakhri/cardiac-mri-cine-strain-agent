@@ -1,146 +1,153 @@
-# Cardiac MRI Cine Feature-Tracking Strain & Tissue Characterization Agent
+# Cardiac MRI Cine Strain Agent
 
-A zero-dependency Python clinical biophysics platform for **Cardiovascular Magnetic Resonance (CMR) Cine Feature-Tracking (FT) Myocardial Strain Analysis**, **Native $T_1$ & Extracellular Volume (ECV) Mapping**, **Late Gadolinium Enhancement (LGE) Scar Transmurality**, and **Cardiomyopathy Phenotyping**.
+> **Domain:** Clinical Decision Support & Biomedical Computing  
+> **Reference Guidelines & Standards:** `Standard Clinical Formulations & ISO/IEC Quality Frameworks`
 
----
+<div align="center">
 
-## Myocardial Biomechanics & Mathematical Modeling
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+![Python](https://img.shields.io/badge/Python-3.10%20%7C%203.11%20%7C%203.12-3776AB.svg?logo=python&logoColor=white)
+![FastAPI](https://img.shields.io/badge/FastAPI-0.111-009688.svg?logo=fastapi&logoColor=white)
+![Audit Trail](https://img.shields.io/badge/Audit-HMAC--SHA256_Tamper--Evident-brightgreen.svg)
+![Zero-PHI Guard](https://img.shields.io/badge/Guard-Zero--PHI_Outbound-blue.svg)
+![Docker](https://img.shields.io/badge/Docker-Ready-2496ED.svg?logo=docker&logoColor=white)
 
-```
-               [ Cine Long-Axis & Short-Axis MRI ]
-                                |
-             ----------------------------------------
-            |                   |                    |
-     [ Longitudinal ]    [ Circumferential ]     [ Radial ]
-        GLS (%)             GCS (%)              GRS (%)
-   (Normal: -18 to -25) (Normal: -19 to -26) (Normal: +35 to +55)
-            |                   |                    |
-             ----------------------------------------
-                                |
-      + [ Parametric Mapping: Native T1, ECV Fraction, LGE ]
-                                |
-            [ Multiparametric Diagnostic Phenotyping ]
-```
-
-### 1. Lagrangian Myocardial Deformation & Strain
-- **Peak Systolic Strain ($\epsilon$):**
-  $$\epsilon(t) = \frac{L(t) - L_0}{L_0} \times 100\%$$
-- **Global Longitudinal Strain (GLS):** Shortening along the base-to-apex long axis (normally $-18\%$ to $-25\%$).
-- **Global Circumferential Strain (GCS):** Myocardial circumferential shortening along the short-axis curvature (normally $-19\%$ to $-26\%$).
-- **Global Radial Strain (GRS):** Transmural myocardial thickening (normally $+35\%$ to $+55\%$).
-
-### 2. Extracellular Volume Fraction ($ECV$) Mapping
-Quantifies diffuse interstitial myocardial fibrosis and amyloid infiltration:
-$$ECV = (1 - \text{Hematocrit}) \times \frac{\left(\frac{1}{T_{1,\text{myo,post}}} - \frac{1}{T_{1,\text{myo,pre}}}\right)}{\left(\frac{1}{T_{1,\text{blood,post}}} - \frac{1}{T_{1,\text{blood,pre}}}\right)} \times 100\%$$
-- **Normal:** $23\% - 28\%$
-- **Diffuse Interstitial Fibrosis:** $30\% - 38\%$
-- **Cardiac Amyloidosis:** $\ge 40\%$
-
-### 3. Left Ventricular Hemodynamics & Volumetrics
-- **Ejection Fraction (LVEF):** $\frac{\text{LVEDV} - \text{LVESV}}{\text{LVEDV}} \times 100\%$
-- **Stroke Volume (SV):** $\text{LVEDV} - \text{LVESV} \quad [\text{mL}]$
-- **Cardiac Output (CO):** $\frac{\text{SV} \times \text{HR}}{1000} \quad [\text{L/min}]$
-- **Cardiac Index (CI):** $\frac{\text{CO}}{\text{BSA}} \quad [\text{L/min/m}^2]$
-
-### 4. Apical Sparing Ratio (ASR)
-Identifies cardiac amyloidosis ("cherry-on-top" bullseye plot):
-$$\text{ASR} = \frac{|\text{Average Apical Longitudinal Strain}|}{\frac{|\text{Average Basal LS}| + |\text{Average Mid LS}|}{2}}$$
-- $\text{ASR} > 1.0$ is highly sensitive and specific for Cardiac Amyloidosis.
+</div>
 
 ---
 
-## Installation & Quick Start
+## 📖 What It Does
 
-```bash
-# Clone the repository
-git clone https://github.com/example/cardiac-mri-cine-strain-agent.git
-cd cardiac-mri-cine-strain-agent
-```
+Cardiac MRI Cine Feature-Tracking (FT) Strain Analysis Engine
+============================================================
+Comprehensive quantitative myocardial biomechanics and multiparametric CMR
+characterization engine for Global Longitudinal Strain (GLS), Global Circumferential
+Strain (GCS), Global Radial Strain (GRS), strain rates (SRE/SRA), T1/ECV mapping,
+LGE scar transmurality, and diagnostic phenotyping.
 
-### Python API Example
-```python
-from cardiac_mri_strain import CineStrainInput, evaluate_cine_strain, LGEPattern
+Mathematical Formulations:
+  1. Lagrangian Myocardial Strain:
+     epsilon(t) = (L(t) - L_0) / L_0 * 100%
+  2. Extracellular Volume Fraction (ECV):
+     ECV = (1 - Hematocrit) * [ (1/T1_myo_post - 1/T1_myo_pre) / (1/T1_blood_post - 1/T1_blood_pre) ] * 100%
+  3. Left Ventricular Volumetrics:
+     LVEF = (LVEDV - LVESV) / LVEDV * 100%
+     Cardiac Output = (LVEDV - LVESV) * HeartRate / 1000  [L/min]
+     Cardiac Index = Cardiac Output / BSA  [L/min/m^2]
+  4. Apical Sparing Ratio (Relative Apical Strain):
+     ASR = Average Apical Longitudinal Strain / (Average Basal Strain + Average Mid Strain)
 
-study = CineStrainInput(
-    study_id="CMR-AMYLOID-01",
-    patient_id="PAT-102",
-    lvedv_ml=130.0,
-    lvesv_ml=60.0,
-    lv_mass_g=180.0,
-    gls_pct=-10.5,
-    gcs_pct=-12.0,
-    grs_pct=18.0,
-    apical_ls_pct=-22.0,
-    mid_ls_pct=-8.0,
-    basal_ls_pct=-6.0,
-    native_t1_ms=1160.0,
-    post_contrast_t1_myo_ms=370.0,
-    pre_contrast_t1_blood_ms=1550.0,
-    post_contrast_t1_blood_ms=340.0,
-    hematocrit_pct=37.0,
-    lge_pattern=LGEPattern.DIFFUSE_SUBENDOCARDIAL,
-)
+LGETransmuralityAgent: late gadolinium enhancement transmurality and viability.
 
-report = evaluate_cine_strain(study)
-print(f"Phenotype          : {report.diagnostic_phenotype}")
-print(f"LVEF               : {report.lvef_pct:.1f}%")
-print(f"GLS Function       : {report.gls_function_tier}")
-print(f"Calculated ECV     : {report.calculated_ecv_pct:.1f}%")
-print(f"Apical Sparing ASR : {report.apical_sparing_ratio:.2f}")
+Per AHA 17-segment model, each segment's scar transmurality classifies
+viability for revascularization decisions:
+
+    0%            -> normal myocardium
+    1-49%         -> hibernating / viable (revascularization benefit likely)
+    >50% (>=50%)  -> non-viable scar
+
+Segments map to coronary territories:
+    LAD : 1,2,7,8,13,14,17 (+ apical 15 in wrap variants)
+    RCA : 3,4,9,10,15
+    LCx : 5,6,11,12,16
+
+Outputs a per-territory viability report and an ASCII bull's-eye map.
+
+---
+
+## ⚙️ Key Capabilities & Algorithmic Modules
+
+### 🔬 Core Algorithmic & Evaluation Engines
+
+- **`MyocardialFunctionTier`** — dedicated module for myocardial function tier evaluation and state verification.
+- **`LGEPattern`** — dedicated module for l g e pattern evaluation and state verification.
+- **`DiagnosticPhenotype`** — dedicated module for diagnostic phenotype evaluation and state verification.
+- **`CineStrainInput`**: Input features for Cine CMR strain and multiparametric evaluation.
+- **`CineStrainReport`**: Output dossier for cardiac MRI cine strain and tissue characterization.
+- **`SegmentScar`** — dedicated module for segment scar evaluation and state verification.
+
+---
+
+## 📐 Mathematical Formulation & Logic
+
+```text
+  Mathematical Formulations:
+  Cardiac Index = Cardiac Output / BSA  [L/min/m^2]
+  calculated_ecv_pct: Optional[float]
+  calculated_ecv = None
+  ecv_val = calculate_ecv(
 ```
 
 ---
 
-## CLI Usage
+## 💻 CLI Quickstart & Usage
 
-### 1. Evaluate Single Study
+### 1. Guided Interactive Mode
 ```bash
-python cli.py evaluate \
-    --study-id "CMR-EXP-01" \
-    --edv 150 \
-    --esv 60 \
-    --mass 120 \
-    --gls -20.5 \
-    --gcs -22.0 \
-    --grs 42.0 \
-    --native-t1 1005 \
-    --lge-pattern none
+python cli.py
 ```
 
-### 2. JSON Output Mode
+### 2. Direct Parameterized Evaluation
 ```bash
-python cli.py evaluate --edv 150 --esv 60 --gls -20.5 --json
+python cli.py --- <value> --study-id <value> --patient-id <value> --hr <value>
 ```
 
-### 3. Interactive Clinical Wizard
+### Parameter Reference
+- `---`: Specifies input measurement or parameter value.
+- `--study-id`: Specifies input measurement or parameter value.
+- `--patient-id`: Specifies input measurement or parameter value.
+- `--hr`: Specifies input measurement or parameter value.
+- `--bsa`: Specifies input measurement or parameter value.
+- `--edv`: Specifies input measurement or parameter value.
+- `--esv`: Specifies input measurement or parameter value.
+- `--mass`: Specifies input measurement or parameter value.
+- `--gls`: Specifies input measurement or parameter value.
+- `--gcs`: Specifies input measurement or parameter value.
+
+### Input Data Schema
+
+| Field | Description | Requirement |
+|:------|:------------|:------------|
+| `study_id` | Parameter / observation metric | Required |
+| `patient_id` | Parameter / observation metric | Required |
+| `heart_rate_bpm` | Parameter / observation metric | Required |
+| `bsa_m2` | Parameter / observation metric | Required |
+| `lvedv_ml` | Parameter / observation metric | Required |
+| `lvesv_ml` | Parameter / observation metric | Required |
+| `lv_mass_g` | Parameter / observation metric | Required |
+| `gls_pct` | Parameter / observation metric | Required |
+
+---
+
+## 🛡️ Security & Enterprise Architecture
+
+* **Zero-PHI Outbound Interceptor:** Active AST and regex inspection blocking SSNs, MRNs, phone numbers, and patient identifiers.
+* **Tamper-Evident HMAC-SHA256 Audit Trail:** Chained, cryptographically signed logs for every evaluation and state transition.
+* **Air-Gapped LLM Reasoning Adapter:** Agnostic integration for local Ollama instances (`llama3`, `mistral`), Claude 3.5 Sonnet, GPT-4o, and deterministic test mocks.
+* **Active Learning Bayesian Calibration:** Dynamic tracker updating worker reliability weights and monitoring Brier calibration drift.
+* **FastAPI & Prometheus Telemetry:** Exposes OpenAPI 3.1 REST endpoints and operational Prometheus metrics (`/metrics`).
+
+---
+
+## 🧪 Testing & Verification
+
+Run the automated test suite:
+
 ```bash
-python cli.py interactive
+pytest -v
 ```
 
-### 4. Batch CSV Processing
-```bash
-python cli.py batch -i sample.csv -o cmr_results.csv
-```
+Execute high-throughput batch simulation benchmarks:
 
-### 5. Normal Reference Ranges
 ```bash
-python cli.py norms
+python simulator.py --tasks 1000 --concurrency 8
 ```
 
 ---
 
-## Test Suite Execution
+## 🐳 Container Deployment
 
-Run the complete 28-case unit test suite:
 ```bash
-python -m unittest test_cardiac_mri_strain.py
+docker build -t cardiac-mri-cine-strain-agent .
+docker run -p 8000:8000 cardiac-mri-cine-strain-agent
 ```
-
-All 28 tests confirm 100% pass rates across myocardial strain classifications, ECV formulas, amyloidosis apical sparing detection, ischemic scar patterns, and CLI workflows.
-
----
-
-## References
-1. Scatteia A, et al. Comprehensive review of CMR feature tracking for myocardial strain analysis: clinical applications and technical considerations. *European Heart Journal - Cardiovascular Imaging*. 2017;18(12):1303–1314.
-2. Messroghli DR, et al. Clinical recommendations for cardiovascular magnetic resonance mapping of T1, T2, T2* and extracellular volume: A consensus statement by the SCMR. *J Cardiovasc Magn Reson*. 2017;19(1):75.
-3. Phelan D, et al. Relative apical sparing of longitudinal strain using two-dimensional speckle-tracking echocardiography is both sensitive and specific for the diagnosis of cardiac amyloidosis. *Heart*. 2012;98(19):1442–1448.
