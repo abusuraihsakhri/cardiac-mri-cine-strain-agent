@@ -1,5 +1,7 @@
 # Cardiac MRI Cine & Strain Calculator
 
+### [Open the Live Application →](https://abusuraihsakhri.github.io/cardiac-mri-cine-strain-agent/)
+
 Quantitative cardiac MRI calculator for already-measured cine volumes, global strain values, and T1/ECV inputs. It derives volumetric and hemodynamic indices plus ECV without external runtime dependencies.
 
 ## What it calculates
