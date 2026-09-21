@@ -1,5 +1,7 @@
-import unittest
-from test_cardiac_mri_strain import TestCardiacMRICineStrainAgent
+from cardiac_mri_strain import REFERENCE_NOTE
 
-if __name__ == "__main__":
-    unittest.main()
+
+def test_reference_note_requires_method_specific_interpretation():
+    text = REFERENCE_NOTE.lower()
+    assert "method-specific" in text
+    assert "local" in text

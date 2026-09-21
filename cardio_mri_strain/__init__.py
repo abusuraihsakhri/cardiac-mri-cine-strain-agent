@@ -1,33 +1,32 @@
-"""
-Cardiac MRI Cine Strain & Tissue Characterization Package
-"""
-
+"""Public package API for cardiac MRI quantitative calculations."""
 from cardiac_mri_strain import (
+    REFERENCE_NOTE,
     CineStrainInput,
     CineStrainReport,
-    MyocardialFunctionTier,
-    LGEPattern,
     DiagnosticPhenotype,
+    LGEPattern,
+    MyocardialFunctionTier,
     calculate_ecv,
-    classify_longitudinal_strain,
+    calculate_metrics,
     classify_circumferential_strain,
+    classify_longitudinal_strain,
     classify_radial_strain,
     evaluate_cine_strain,
-    calculate_metrics,
     process_batch,
 )
 
 __all__ = [
+    "REFERENCE_NOTE",
     "CineStrainInput",
     "CineStrainReport",
-    "MyocardialFunctionTier",
-    "LGEPattern",
     "DiagnosticPhenotype",
+    "LGEPattern",
+    "MyocardialFunctionTier",
     "calculate_ecv",
-    "classify_longitudinal_strain",
+    "calculate_metrics",
     "classify_circumferential_strain",
+    "classify_longitudinal_strain",
     "classify_radial_strain",
     "evaluate_cine_strain",
-    "calculate_metrics",
     "process_batch",
 ]

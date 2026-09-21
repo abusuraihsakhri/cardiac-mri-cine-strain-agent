@@ -3,25 +3,29 @@ requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "cardiac-mri-cine-strain-engine"
-version = "2.0.0"
-description = "CardioMRI-Strain: Feature Tracking & Global Longitudinal Strain Engine"
+name = "cardiac-mri-cine-strain-agent"
+version = "3.0.0"
+description = "Quantitative cardiac MRI cine, strain-summary, and ECV calculations"
 readme = "README.md"
-authors = [{ name = "Dr. Abu Suraih Sakhri", email = "abusuraih@example.com" }]
+authors = [{ name = "NAME" }]
 license = { text = "MIT" }
-classifiers = [
-    "Programming Language :: Python :: 3",
-    "License :: OSI Approved :: MIT License",
-    "Operating System :: OS Independent",
-    "Topic :: Security/Cryptography",
-    "Topic :: Scientific/Engineering :: Artificial Intelligence",
-]
 requires-python = ">=3.9"
 dependencies = []
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: OS Independent",
+  "Topic :: Scientific/Engineering :: Medical Science Apps.",
+]
 
 [project.scripts]
+cardio-mri-strain = "cardio_mri_strain.cli:main"
 cardiac-mri-cine-strain-engine = "cardio_mri_strain.cli:main"
 
 [project.urls]
-Homepage = "https://github.com/abusuraihsakhri/cardiac-mri-cine-strain-engine"
-Repository = "https://github.com/abusuraihsakhri/cardiac-mri-cine-strain-engine.git"
+Homepage = "https://github.com/abusuraihsakhri/cardiac-mri-cine-strain-agent"
+Repository = "https://github.com/abusuraihsakhri/cardiac-mri-cine-strain-agent.git"
+
+[tool.setuptools]
+packages = ["cardio_mri_strain"]
+py-modules = ["cardiac_mri_strain", "cli"]

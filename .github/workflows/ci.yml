@@ -2,35 +2,40 @@ name: CI
 
 on:
   push:
-    branches: [ master, main ]
+    branches: [master, main]
   pull_request:
-    branches: [ master, main ]
+    branches: [master, main]
+
+permissions:
+  contents: read
 
 jobs:
   test:
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
-        python-version: ["3.10", "3.11", "3.12"]
-
+        python-version: ["3.10", "3.11", "3.12", "3.13"]
     steps:
-    - uses: actions/checkout@v4
-
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v5
-      with:
-        python-version: ${{ matrix.python-version }}
-
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install pytest
-
-    - name: Run Test Suite
-      run: |
-        pytest -v
-
-    - name: Verify CLI Smoke Test
-      run: |
-        python cli.py batch -i sample.csv -o out_smoke.csv
-
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install package and test dependency
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e . pytest
+          python -m pip check
+      - name: Compile Python sources
+        run: python -m compileall -q cardiac_mri_strain.py cli.py cardio_mri_strain tests
+      - name: Run tests
+        run: python -m pytest -q
+      - name: CLI smoke test
+        run: |
+          cardio-mri-strain evaluate --edv 150 --esv 60 --json > /tmp/cmr.json
+          cardio-mri-strain batch -i sample.csv -o /tmp/cmr.csv
+      - name: Browser calculation smoke test
+        run: |
+          node --check docs/app.js
+          node --check docs/calculations.mjs
+          node --input-type=module -e "import {computeMetrics} from './docs/calculations.mjs'; const r=computeMetrics({edv:150,esv:60,hr:70,bsa:2,mass:120,gls:-20,gcs:-22,grs:42,nativeT1:'',postMyoT1:'',preBloodT1:'',postBloodT1:'',hct:''}); if (r.lvef !== 60) process.exit(1);"
