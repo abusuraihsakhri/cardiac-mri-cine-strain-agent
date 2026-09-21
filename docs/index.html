@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'self'">
+  <title>Cardiac MRI Quantitative Calculator</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="shell">
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">CMR quantitative calculator</p>
+        <h1>Cardiac MRI Cine & Strain Summary</h1>
+      </div>
+      <button id="theme-toggle" class="icon-button" type="button" aria-label="Toggle dark mode" aria-pressed="false">◐</button>
+    </header>
+
+    <div class="notice" role="note">Research/educational calculator. Enter de-identified measurements only. Values are processed locally in your browser and are not uploaded.</div>
+
+    <section class="workspace">
+      <form id="cmr-form" class="panel inputs">
+        <div class="panel-heading">
+          <div><h2>Measurements</h2><p>Already-derived CMR measurements; no image segmentation is performed.</p></div>
+        </div>
+        <div class="field-grid">
+          <label>LVEDV <span>mL</span><input name="edv" type="number" step="any" value="145" required></label>
+          <label>LVESV <span>mL</span><input name="esv" type="number" step="any" value="58" required></label>
+          <label>Heart rate <span>bpm</span><input name="hr" type="number" step="any" value="72" required></label>
+          <label>BSA <span>m²</span><input name="bsa" type="number" step="any" value="1.85" required></label>
+          <label>LV mass <span>g</span><input name="mass" type="number" step="any" value="120" required></label>
+          <label>GLS <span>%</span><input name="gls" type="number" step="any" value="-20.5" required></label>
+          <label>GCS <span>%</span><input name="gcs" type="number" step="any" value="-22" required></label>
+          <label>GRS <span>%</span><input name="grs" type="number" step="any" value="42" required></label>
+        </div>
+        <details>
+          <summary>T1 / ECV inputs <span>optional</span></summary>
+          <div class="field-grid compact">
+            <label>Native myocardial T1 <span>ms</span><input name="nativeT1" type="number" step="any" value="1005"></label>
+            <label>Post myocardial T1 <span>ms</span><input name="postMyoT1" type="number" step="any" value="480"></label>
+            <label>Pre blood T1 <span>ms</span><input name="preBloodT1" type="number" step="any" value="1580"></label>
+            <label>Post blood T1 <span>ms</span><input name="postBloodT1" type="number" step="any" value="320"></label>
+            <label>Hematocrit <span>%</span><input name="hct" type="number" step="any" value="42"></label>
+          </div>
+        </details>
+        <div id="error" class="error" role="alert" hidden></div>
+        <div class="actions"><button class="primary" type="submit">Analyze</button><button id="reset" type="button">Reset</button></div>
+      </form>
+
+      <section class="panel results" aria-live="polite">
+        <div class="panel-heading"><div><h2>Calculated metrics</h2><p>Interpret against the reference interval validated for your acquisition and analysis method.</p></div></div>
+        <div class="metrics">
+          <article><span>LVEF</span><strong data-result="lvef">—</strong></article>
+          <article><span>Stroke volume</span><strong data-result="sv">—</strong></article>
+          <article><span>LVEDVI</span><strong data-result="edvi">—</strong></article>
+          <article><span>LVESVI</span><strong data-result="esvi">—</strong></article>
+          <article><span>Stroke volume index</span><strong data-result="svi">—</strong></article>
+          <article><span>Cardiac output</span><strong data-result="co">—</strong></article>
+          <article><span>Cardiac index</span><strong data-result="ci">—</strong></article>
+          <article><span>LV mass index</span><strong data-result="lvmi">—</strong></article>
+          <article><span>GLS</span><strong data-result="gls">—</strong></article>
+          <article><span>GCS</span><strong data-result="gcs">—</strong></article>
+          <article><span>GRS</span><strong data-result="grs">—</strong></article>
+          <article><span>ECV</span><strong data-result="ecv">—</strong></article>
+        </div>
+        <p class="footnote">Native T1, ECV, and CMR strain values are method dependent. This application deliberately does not infer a diagnosis or treatment recommendation.</p>
+      </section>
+    </section>
+  </main>
+  <script type="module" src="app.js"></script>
+</body>
+</html>
