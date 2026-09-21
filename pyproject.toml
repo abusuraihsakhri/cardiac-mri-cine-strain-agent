@@ -28,12 +28,4 @@ Repository = "https://github.com/abusuraihsakhri/cardiac-mri-cine-strain-agent.g
 
 [tool.setuptools]
 packages = ["cardio_mri_strain"]
-py-modules = [
-  "cardiac_mri_strain",
-  "cli",
-  "tissue_tracking",
-  "lge_transmurality_agent",
-  "molli_t1_ecv_agent",
-  "perfusion_detection",
-  "valvular_flow_agent",
-]
+py-modules = ["cardiac_mri_strain", "cli"]
